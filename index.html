@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+
+<header class="shadow">
+<div class="container-logo">
+    <img src="assets/les.jpg" alt="logo">
+</div>
+
+<div>
+<button id="btn-dark-mode">Dark mode</button>
+</div>
+
+</header>
+
+<section class="main-container">
+    <p>Active Theory Team</p>
+    <h1>Rick
+         and Morty</h1>
+         <span>Television & film /Noninee</span>
+</section>
+
+<div class="search">
+    <input type="text" placeholder="Buscar personaje">
+    <button>Buscar</button>
+</div>
+
+<section id="personajes" class="personajes_imagen">
+</section>
+
+
+<div>
+    <button id="btn-load-more"  >
+        Cargar mas personajes
+    </button>
+</div>
+
+
+
+
+</body>
+
+<script>
+
+let info_pages=null
+
+function renderLoader(){
+const contenedor=document.getElementById('personajes')
+const loader= document.createElement('div')
+loader.setAttribute('id','loader')
+loader.appendChild(document.createTextNode('Cargando ...'))
+contenedor.appendChild(loader)
+}
+function hiddenLoader(){
+    const contenedor=document.getElementById('personajes')
+    const loader=document.getElementById('loader')
+    contenedor.removeChild(loader)
+}
+ async function obtener_personajes(page =1 ){
+ const url ="https://rickandmortyapi.com/api/character";
+renderLoader()
+ const response= await fetch(url)
+ .then(res=>res.json())
+ .catch(err=>console.log(err)); 
+ const personajes =response.results;
+ info_pages=response?.info;
+ console.log('variable response', info_pages);
+ console.log('array',personajes);
+ const contenedor=document.getElementById('personajes')
+ 
+ personajes.forEach(element => {
+
+    const contenedor_personaje=document.createElement('div');
+    const imagen=document.createElement('img')
+    imagen.src=element.image
+    contenedor_personaje.appendChild(imagen)
+    contenedor.appendChild(contenedor_personaje)
+    console.log('elemento', element);
+});
+hiddenLoader()
+ 
+}
+function loadMore(){
+    console.log('load more')
+}
+const btn=document.getElementById('btn-load-more');
+btn.addEventListener('click',loadMore);
+obtener_personajes();
+const darkModeButton=document.getElementById('btn-dark-mode');
+function toggleDarkMode(){
+    document.body.classList.toggle('dark-mode')
+    
+    if(document.body.classList.contains('dark-mode')){
+        darkModeButton.textContent='Ligth mode'
+}   else{
+    darkModeButton.textContent='Dark mode'
+}
+
+
+
+}
+darkModeButton.addEventListener('click',toggleDarkMode)
+
+</script>
+
+</html>
+
+
+
